@@ -1,0 +1,27 @@
+#Libraries
+library(tidyverse)
+library(viridis)
+library(mapdata)
+library(rvest)
+library(ggplot2)
+library (httr) 
+library (jsonlite)
+library(plotly)
+library(formattable)
+library(psych)
+library(FactoMineR)
+#Load Data
+Players <- read.csv("RawStats.csv")
+Data <- Players
+Data$Player <- NULL #Makes it only numbers
+#Doing PCA
+fit <- princomp(Data, cor=TRUE)
+summary(fit) # print variance accounted for
+loadings(fit) # pc loadings
+plot(fit,type="lines") # scree plot
+fit$scores # the principal components
+biplot(fit)
+#Factor Analysis
+result <- PCA(Data) # graphs generated automatically
+#Finding Stat averages
+averages <- colMeans(Data)
