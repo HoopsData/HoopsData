@@ -1,0 +1,27 @@
+#Libraries
+library(ggplot2)
+library(reshape2)
+library(viridis)
+library(dplyr)
+####Step 1 Is Finding the League Offensive Rating Relative to 3PA
+#Load Data
+df1 <- read.csv("3PA vs MedOffRating - Sheet1.csv", header = TRUE)
+#See if both metrics are normal
+hist(df1$X3PA)
+hist(df1$MedianOffensiveRating)
+#Standardizing the Data
+df1$X3PA <- scale(df1$X3PA, center = TRUE, scale = TRUE)
+df1$X3PA <- c(df1$X3PA)+5
+df1$MedianOffensiveRating <- scale(df1$MedianOffensiveRating, center = TRUE, scale = TRUE)
+df1$MedianOffensiveRating <- c(df1$MedianOffensiveRating)+5
+df1 <- df1 %>%rename(ThreePointAttempts = X3PA) 
+#Graph the data
+adjDf1 <- melt(df1, id.vars='Year')
+ggplot(adjDf1, aes(x=Year, y=value, fill=variable)) +
+  geom_bar(stat='identity', position='dodge')+
+  ylab("Value")+
+  ggtitle("NBA Median Offensive Rating In Relation To 3PA Over Time")+
+  theme_gray(base_size = 15)+
+  labs(fill = "Legend", "Median Offensive Rating", subtitle = "The values were standardized through Z-Scores")+
+  scale_fill_manual(values = c("#FF8000", "#08088A"))
+###Step 1 Complete
